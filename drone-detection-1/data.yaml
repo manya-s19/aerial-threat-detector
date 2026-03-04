@@ -1,0 +1,14 @@
+names:
+- birds
+- drones
+- plane
+nc: 3
+roboflow:
+  license: CC BY 4.0
+  project: drone-detection-vg2iu
+  url: https://universe.roboflow.com/drones-lfobz/drone-detection-vg2iu/dataset/1
+  version: 1
+  workspace: drones-lfobz
+test: ../test/images
+train: ../train/images
+val: ../valid/images
