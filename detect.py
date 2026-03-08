@@ -12,7 +12,6 @@ THREAT_LEVEL = {
     "0":          ("UNKNOWN",       (128, 128, 128)),
 }
 
-# Smoothing buffer — keeps last 5 frames of detections
 history = deque(maxlen=5)
 
 cap = cv2.VideoCapture(0)
@@ -24,7 +23,6 @@ while True:
 
     results = model(frame, conf=0.45, verbose=False)[0]
 
-    # Draw boxes
     for box in results.boxes:
         cls_name = model.names[int(box.cls)]
         conf = float(box.conf)
@@ -35,11 +33,9 @@ while True:
         cv2.putText(frame, label, (x1, y1-10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
 
-    # Add current detections to history
     current = [model.names[int(b.cls)] for b in results.boxes]
     history.append(current)
 
-    # Flatten history and pick most common threat across last 5 frames
     all_recent = [cls for frame_dets in history for cls in frame_dets]
 
     if all_recent.count("drones") >= 2:
@@ -51,7 +47,6 @@ while True:
     else:
         summary, scol = "AIRSPACE CLEAR", (200, 200, 200)
 
-    # Status bar at top
     cv2.rectangle(frame, (0,0), (frame.shape[1], 55), (20,20,20), -1)
     cv2.putText(frame, summary, (15, 38),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.9, scol, 2)
